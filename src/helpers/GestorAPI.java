@@ -1,3 +1,5 @@
+package helpers;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -6,8 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 public class GestorAPI {
@@ -27,7 +27,7 @@ public class GestorAPI {
 
     //TODO Cas 1 i 2: necessiten resultats d'una cerca (la 1 en necessita 3 només)
 
-    public JsonArray getResultList(String param, int maxResults) {
+    public JsonObject getResult(String param, int maxResults) {
         String enllac;
 
         if (maxResults == -1) {
@@ -43,7 +43,7 @@ public class GestorAPI {
             Gson gson = new Gson();
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             JsonObject jsonObject = gson.fromJson(br, JsonObject.class);
-            return jsonObject.getAsJsonArray("items");
+            return jsonObject;
 
         } catch (IOException e) {
             e.printStackTrace();

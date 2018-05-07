@@ -1,6 +1,12 @@
-import com.google.gson.JsonArray;
-import helpers.GestorAPI;
+package logica;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import helpers.GestorAPI;
+import helpers.GestorJSON;
+import model.Resultat;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Funcionalitat {
@@ -19,13 +25,17 @@ public class Funcionalitat {
 
                     System.out.println();
                     System.out.println("Insereix el pàrametre de cerca:");
-                    System.out.println();
                     String param = sc.next();
 
                     GestorAPI gestorAPI = GestorAPI.getSharedInstance();
-                    JsonArray result = gestorAPI.getResultList(param, 3);
+                    JsonObject result = gestorAPI.getResult(param, 3);
 
-                    System.out.println(result.toString());
+                    GestorJSON gestorJSON = GestorJSON.getSharedInstance();
+                    ArrayList<Resultat> llista = gestorJSON.getResultList(result);
+
+                    for (Resultat r : llista) {
+                        System.out.println(r.toString());
+                    }
 
                     break;
                 case 2:
