@@ -30,7 +30,7 @@ public class Menu {
         System.out.println("5. Llistes de Reproducció");
         System.out.println("6. El Mosaic");
         System.out.println("7. Sortir");
-        System.out.println("");
+        System.out.println();
 
     }
 
@@ -42,17 +42,17 @@ public class Menu {
             opcio = sc.nextInt();
             if(opcio > MAX_OPCIO || opcio < MIN_OPCIO){
 
-                System.out.println("");
+                System.out.println();
                 System.out.println("Opció incorrecta, torna a provar.");
-                System.out.println("");
+                System.out.println();
 
             }
 
         } catch(InputMismatchException e){
 
-            System.out.println("");
+            System.out.println();
             System.out.println("Opció incorrecta, torna a provar.");
-            System.out.println("");
+            System.out.println();
             sc.next();
             opcio = 0;
 
