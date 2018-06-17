@@ -3,11 +3,9 @@ package helpers;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import model.Resultat;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
 public class GestorJSON {
@@ -26,12 +24,14 @@ public class GestorJSON {
         return sharedInstance;
     }
 
-    public void carregaPreferits() throws FileNotFoundException {
-        System.out.println(FILEPATH);
+    public ArrayList carregaPreferits() throws FileNotFoundException {
         Gson gson = new Gson();
-        JsonReader reader = new JsonReader(new FileReader(FILEPATH));
-        //model.Preferit data = (model.Preferit) gson.fromJson(reader, model.Preferit.class);
-
+        FileReader file = new FileReader(FILEPATH);
+        BufferedReader br = new BufferedReader(file);
+        if (gson.fromJson(br, ArrayList.class) == null) {
+            return new ArrayList<Resultat>();
+        }
+        return gson.fromJson(br, ArrayList.class);
     }
 
     public ArrayList<Resultat> getResultList(JsonObject jsonObject) {
@@ -63,4 +63,21 @@ public class GestorJSON {
         return resultats;
     }
 
+    public String getNextPageCode(JsonObject result) {
+        return result.get("nextPageToken").getAsString();
+    }
+
+    public void saveFile(ArrayList<Resultat> preferits){
+        Gson gson = new Gson();
+        String textJson = gson.toJson(preferits);
+
+        PrintWriter fileWriter = null;
+        try {
+            fileWriter = new PrintWriter(new File(FILEPATH));
+            fileWriter.println(textJson);
+            fileWriter.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error al guardar el fitxer.");
+        }
+    }
 }

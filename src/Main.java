@@ -10,11 +10,9 @@ public class Main {
 
         GestorJSON gestorJSON = GestorJSON.getSharedInstance();
         Menu menu = new Menu();
-        Funcionalitat funcionalitat = new Funcionalitat();
 
         try {
-
-            gestorJSON.carregaPreferits();
+            Funcionalitat funcionalitat = new Funcionalitat(gestorJSON.carregaPreferits());
             do {
                 do {
                     menu.mostraMenu();
