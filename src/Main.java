@@ -1,6 +1,7 @@
 import helpers.GestorJSON;
 import helpers.Menu;
 import logica.Funcionalitat;
+import model.PreferitsManager;
 
 import java.io.FileNotFoundException;
 
@@ -12,7 +13,8 @@ public class Main {
         Menu menu = new Menu();
 
         try {
-            Funcionalitat funcionalitat = new Funcionalitat(gestorJSON.carregaPreferits());
+            PreferitsManager manager = new PreferitsManager(gestorJSON.carregaPreferits());
+            Funcionalitat funcionalitat = new Funcionalitat(manager);
             do {
                 do {
                     menu.mostraMenu();

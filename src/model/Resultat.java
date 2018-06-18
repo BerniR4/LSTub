@@ -1,20 +1,28 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Resultat {
 
-    private String tipus;
-    private String titol;
-    private String descripcio;
-    private String canal;
+    protected String id;
+    protected String tipus;
+    protected String titol;
+    protected String descripcio;
+    protected String canal;
 
     public Resultat() {
     }
 
-    public Resultat(String tipus, String titol, String descripcio, String canal) {
+    public Resultat(String id, String tipus, String titol, String descripcio, String canal) {
+        this.id = id;
         this.tipus = tipus;
         this.titol = titol;
         this.descripcio = descripcio;
         this.canal = canal;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTipus() {

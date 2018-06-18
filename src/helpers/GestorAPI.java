@@ -17,6 +17,8 @@ public class GestorAPI {
     private static final String SNIPPET = "part=snippet&q=";
     private static final String MAX_RESULTS = "&maxResults=";
 
+    private static final String VIDEO_URL = "https://www.googleapis.com/youtube/v3/videos?part=id,statistics&id=";
+
     private static GestorAPI sharedInstance = new GestorAPI();
 
     private GestorAPI(){
@@ -25,8 +27,6 @@ public class GestorAPI {
     public static GestorAPI getSharedInstance() {
         return sharedInstance;
     }
-
-    //TODO Cas 1 i 2: necessiten resultats d'una cerca (la 1 en necessita 3 només)
 
     public JsonObject getResult(String param, int maxResults, String nextPage) {
         String enllac;
@@ -41,6 +41,19 @@ public class GestorAPI {
             enllac = YT_URL + NEXT_PAGE + nextPage + "&" + SNIPPET + param + MAX_RESULTS + 10 + API_KEY;
         }
 
+        return createConnection(enllac);
+    }
+
+    public JsonObject getVideoInfo(String id) {
+
+        String enllac = VIDEO_URL + id + API_KEY;
+
+        return  createConnection(enllac);
+
+
+    }
+
+    private JsonObject createConnection(String enllac) {
         try {
             URL url = new URL(enllac);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -53,7 +66,6 @@ public class GestorAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
 
     }

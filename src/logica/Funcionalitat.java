@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import helpers.GestorAPI;
 import helpers.GestorJSON;
+import model.PreferitsManager;
 import model.Resultat;
 
 import java.io.File;
@@ -13,10 +14,10 @@ import java.util.Scanner;
 
 public class Funcionalitat {
 
-    private ArrayList<Resultat> preferits;
+    private PreferitsManager manager;
 
-    public Funcionalitat(ArrayList<Resultat> preferits){
-        this.preferits = preferits;
+    public Funcionalitat(PreferitsManager manager){
+        this.manager = manager;
     }
 
     public void executaFuncionalitat(int opcio){
@@ -83,7 +84,7 @@ public class Funcionalitat {
                             try {
                                 int aux = Integer.parseInt(param);
                                 if (aux > 0 && aux <= 10) {
-                                    preferits.add(llista.get(aux - 1));
+                                    manager.afegirPreferit(llista.get(aux - 1));
                                     continuar = false;
                                 } else {
                                     System.out.println("Error, no ha introduït una instrucció vàlida.");
@@ -94,9 +95,9 @@ public class Funcionalitat {
 
                         }
                     } while (continuar);
-                    gestorJSON.saveFile(preferits);
                     break;
                 case 3:
+                    manager.getVideoList();
                     System.out.println("XD");
                     break;
                 case 4:

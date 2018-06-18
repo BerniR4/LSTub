@@ -1,7 +1,5 @@
 package helpers;
 
-import model.Preferit;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -11,7 +9,6 @@ public class Menu {
     private final int MAX_OPCIO = 7;
     private final int MIN_OPCIO = 1;
     private Scanner sc;
-    private Preferit[] preferits;
 
     public Menu() {
         sc = new Scanner(System.in);
