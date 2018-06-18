@@ -6,10 +6,13 @@ import helpers.GestorAPI;
 import helpers.GestorJSON;
 import model.PreferitsManager;
 import model.Resultat;
+import model.Video;
 
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class Funcionalitat {
@@ -97,8 +100,11 @@ public class Funcionalitat {
                     } while (continuar);
                     break;
                 case 3:
-                    manager.getVideoList();
-                    System.out.println("XD");
+                    ArrayList<Video> list = manager.getVideoList();
+                    Collections.sort(list, Video.PERCENT_COMPARATOR);
+                    for (int i = 0; i < 10 && i < list.size(); i++) {
+                        System.out.println(list.get(i).getTitol());
+                    }
                     break;
                 case 4:
                     break;

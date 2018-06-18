@@ -42,23 +42,20 @@ public class GestorJSON {
         ArrayList<Resultat> resultats = new ArrayList<>();
         JsonArray items = jsonObject.getAsJsonArray("items");
         for (int i = 0; i < items.size(); i++) {
-            Resultat parsed = null;
+            Resultat parsed = new Resultat();
             JsonObject unparsed = items.get(i).getAsJsonObject();
             switch (unparsed.getAsJsonObject("id").get("kind").getAsString()) {
                 case VIDEO:
-                    parsed = new Video();
                     parsed.setTipus("Video");
                     parsed.setId(unparsed.getAsJsonObject("id").get("videoId").getAsString());
                     break;
 
                 case CANAL:
-                    parsed = new Canal();
                     parsed.setTipus("Canal");
                     parsed.setId(unparsed.getAsJsonObject("id").get("channelId").getAsString());
                     break;
 
                 case LLISTA:
-                    parsed = new Llista();
                     parsed.setTipus("Llista de reproducció");
                     parsed.setId(unparsed.getAsJsonObject("id").get("playlistId").getAsString());
                     break;
@@ -92,11 +89,13 @@ public class GestorJSON {
     }
 
     public long getLikes(JsonObject result) {
-        return result.getAsJsonArray("items").get(0).getAsJsonObject().get("likeCount").getAsLong();
+        return result.getAsJsonArray("items").get(0).getAsJsonObject().get("statistics").getAsJsonObject()
+                .get("likeCount").getAsLong();
     }
 
     public long getDislikes(JsonObject result) {
-        return result.getAsJsonArray("items").get(0).getAsJsonObject().get("dislikeCount").getAsLong();
+        return result.getAsJsonArray("items").get(0).getAsJsonObject().get("statistics").getAsJsonObject()
+                .get("dislikeCount").getAsLong();
     }
 
 }

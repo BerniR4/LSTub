@@ -1,5 +1,6 @@
 package model;
 
+import com.google.gson.JsonObject;
 import helpers.GestorAPI;
 import helpers.GestorJSON;
 
@@ -18,17 +19,18 @@ public class PreferitsManager {
         GestorJSON.getSharedInstance().saveFile(preferits);
     }
 
-    public List<Resultat> getVideoList() {
+    public ArrayList<Video> getVideoList() {
         ArrayList<Video> list = new ArrayList<>();
         for (Resultat r : preferits) {
-            if (r instanceof Video){
-                ((Video) r).setLikes(GestorJSON.getSharedInstance().getLikes(GestorAPI.getSharedInstance()
-                        .getVideoInfo(r.id)));
-                System.out.println(((Video) r).getLikes());
-                list.add((Video) r);
-
+            if (r.getTipus().equals("Video")){
+                JsonObject jsonObject = GestorAPI.getSharedInstance().getVideoInfo(r.id);
+                Video video = new Video(r);
+                video.setLikes(GestorJSON.getSharedInstance().getLikes(jsonObject));
+                video.setDislikes(GestorJSON.getSharedInstance().getDislikes(jsonObject));
+                System.out.println(video.getPercent());
+                list.add(video);
             }
         }
-        return null;
+        return list;
     }
 }
