@@ -61,4 +61,14 @@ public class PreferitsManager {
         llistes.add(l);
         GestorJSON.getSharedInstance().saveFile(this);
     }
+
+    public String getNewestPlaylist() {
+        llistes.sort(Llista.DATE_COMPARATOR);
+        return llistes.get(0).getTitol() + "  -  " + llistes.get(0).getPublicacio().getTime();
+    }
+
+    public String getOldestPlaylist() {
+        llistes.sort(Llista.DATE_COMPARATOR);
+        return llistes.get(llistes.size() - 1).getTitol() + "  -  " + llistes.get(llistes.size() - 1).getPublicacio().getTime();
+    }
 }

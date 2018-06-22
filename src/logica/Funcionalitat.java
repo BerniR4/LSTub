@@ -121,7 +121,12 @@ public class Funcionalitat {
                     System.out.println(System.getProperty("line.separator"));
                     break;
                 case 4:
-                    
+                    System.out.println(System.getProperty("line.separator"));
+                    System.out.println("Mitjana de reproduccions dels videos: " + manager.getAverageReproduccions());
+                    System.out.println("Mitjana de subscriptors dels canals: " + manager.getAverageSubscripcions());
+                    System.out.println("La playlist més vella: " + manager.getOldestPlaylist());
+                    System.out.println("La playlist més nova: " + manager.getNewestPlaylist());
+                    System.out.println(System.getProperty("line.separator"));
                     break;
                 case 5:
                     break;

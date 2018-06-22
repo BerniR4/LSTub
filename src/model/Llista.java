@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 
 public class Llista extends Resultat {
     private Calendar publicacio;
@@ -11,6 +12,8 @@ public class Llista extends Resultat {
         super(resultat.getId(), resultat.getTipus(), resultat.getTitol(),
                 resultat.getDescripcio() , resultat.getCanal(), resultat.getThumbnail());
     }
+
+    public static final Comparator<Llista> DATE_COMPARATOR = (o1, o2) -> (int) (o2.getPublicacio().compareTo(o1.getPublicacio()));
 
     public Calendar getPublicacio() {
         return publicacio;
