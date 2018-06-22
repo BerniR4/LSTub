@@ -113,12 +113,15 @@ public class Funcionalitat {
 
                 case 3:
                     ArrayList<Video> list = manager.getVideos();
-                    Collections.sort(list, Video.PERCENT_COMPARATOR);
+                    list.sort(Video.PERCENT_COMPARATOR);
+                    System.out.println(System.getProperty("line.separator"));
                     for (int i = 0; i < 10 && i < list.size(); i++) {
-                        System.out.println(list.get(i).getTitol());
+                        System.out.println(list.get(i).getTitol() + "  -  " + list.get(i).getPercentatgeLikes());
                     }
+                    System.out.println(System.getProperty("line.separator"));
                     break;
                 case 4:
+                    
                     break;
                 case 5:
                     break;
