@@ -1,18 +1,11 @@
 package logica;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import helpers.GestorAPI;
 import helpers.GestorJSON;
-import model.PreferitsManager;
-import model.Resultat;
-import model.Video;
-
-import java.io.File;
-import java.io.PrintWriter;
+import model.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
 public class Funcionalitat {
@@ -26,11 +19,8 @@ public class Funcionalitat {
     public void executaFuncionalitat(int opcio){
         Scanner sc = new Scanner(System.in);
         if(opcio != 7) {
-
             switch (opcio){
-
                 case 1:
-
                     System.out.println();
                     System.out.println("Insereix el pàrametre de cerca:");
                     String param = sc.next();
@@ -44,7 +34,6 @@ public class Funcionalitat {
                     for (Resultat r : llista) {
                         System.out.println(r.toString());
                     }
-
                     break;
 
                 case 2:
@@ -60,7 +49,6 @@ public class Funcionalitat {
                     llista = gestorJSON.getResultList(result);
                     String nextPage = gestorJSON.getNextPageCode(result);
 
-
                     for (int i = 0; i < 10; i++) {
                         System.out.println(Integer.toString(i + 1) + " - " +
                                 llista.get(i).toString());
@@ -71,7 +59,7 @@ public class Funcionalitat {
                         System.out.println("Insereix un número per a guardar el vídeo o 'NEXT' per a mostrar " +
                                 "els 10 següents.");
                         System.out.println("Si es vol sortir, instrodueix 'STOP': ");
-                        param = sc.next();
+                        param = sc.nextLine();
 
                         if (param.compareToIgnoreCase("STOP") == 0){
                             continuar = false;
@@ -87,7 +75,31 @@ public class Funcionalitat {
                             try {
                                 int aux = Integer.parseInt(param);
                                 if (aux > 0 && aux <= 10) {
-                                    manager.afegirPreferit(llista.get(aux - 1));
+                                    Resultat r = llista.get(aux - 1);
+                                    JsonObject jsonObject;
+                                    switch (r.getTipus()) {
+                                        case "Video":
+                                            Video v = new Video(r);
+                                            jsonObject = GestorAPI.getSharedInstance().getVideoInfo(v.getId());
+                                            v.setPercentatgeLikes(GestorJSON.getSharedInstance().getLikes(jsonObject),
+                                                    GestorJSON.getSharedInstance().getDislikes(jsonObject));
+                                            v.setReproduccions(GestorJSON.getSharedInstance().getReproduccions(jsonObject));
+                                            manager.afegirVideo(v);
+                                            break;
+                                        case "Canal":
+                                            Canal c = new Canal(r);
+                                            jsonObject = GestorAPI.getSharedInstance().getChannelInfo(c.getId());
+                                            c.setSubscriptors(GestorJSON.getSharedInstance().getSubscriptors(jsonObject));
+                                            manager.afegirCanal(c);
+                                            break;
+                                        case "Llista de reproducció":
+                                            Llista l = new Llista(r);
+                                            jsonObject = GestorAPI.getSharedInstance().getPlaylistInfo(l.getId());
+                                            l.setPublicacio(GestorJSON.getSharedInstance().getPublicacio(jsonObject));
+                                            l.setVideos(GestorJSON.getSharedInstance().getPlayListVideos(l.getId()));
+                                            manager.afegirLlista(l);
+                                            break;
+                                    }
                                     continuar = false;
                                 } else {
                                     System.out.println("Error, no ha introduït una instrucció vàlida.");
@@ -95,12 +107,12 @@ public class Funcionalitat {
                             }catch (NumberFormatException e){
                                 System.out.println("Error, no ha introduït una instrucció vàlida.");
                             }
-
                         }
                     } while (continuar);
                     break;
+
                 case 3:
-                    ArrayList<Video> list = manager.getVideoList();
+                    ArrayList<Video> list = manager.getVideos();
                     Collections.sort(list, Video.PERCENT_COMPARATOR);
                     for (int i = 0; i < 10 && i < list.size(); i++) {
                         System.out.println(list.get(i).getTitol());

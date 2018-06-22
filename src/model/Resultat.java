@@ -1,7 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-
 public class Resultat {
 
     protected String id;
@@ -9,16 +7,18 @@ public class Resultat {
     protected String titol;
     protected String descripcio;
     protected String canal;
+    protected String thumbnail;
 
     public Resultat() {
     }
 
-    public Resultat(String id, String tipus, String titol, String descripcio, String canal) {
+    public Resultat(String id, String tipus, String titol, String descripcio, String canal, String thumbnail) {
         this.id = id;
         this.tipus = tipus;
         this.titol = titol;
         this.descripcio = descripcio;
         this.canal = canal;
+        this.thumbnail = thumbnail;
     }
 
     public String getId() {
@@ -61,6 +61,14 @@ public class Resultat {
         this.canal = canal;
     }
 
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -68,7 +76,6 @@ public class Resultat {
         sb.append("Tipus: ").append(tipus).append(System.lineSeparator()).append('\t');
         sb.append("Canal: ").append(canal).append(System.lineSeparator()).append('\t');
         sb.append("Descripció: ").append(descripcio).append(System.lineSeparator());
-
         return sb.toString();
     }
 }

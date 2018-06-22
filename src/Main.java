@@ -11,9 +11,11 @@ public class Main {
 
         GestorJSON gestorJSON = GestorJSON.getSharedInstance();
         Menu menu = new Menu();
+        PreferitsManager manager = null;
 
         try {
-            PreferitsManager manager = new PreferitsManager(gestorJSON.carregaPreferits());
+            manager = new PreferitsManager(gestorJSON.carregaCanals(), gestorJSON.carregaVideos(),
+                    gestorJSON.carregaLlistes());
             Funcionalitat funcionalitat = new Funcionalitat(manager);
             do {
                 do {
@@ -24,12 +26,8 @@ public class Main {
                 funcionalitat.executaFuncionalitat(menu.getOpcio());
 
             } while (!menu.sortir());
-
         } catch (FileNotFoundException e) {
-            System.out.println("Error al llegir el fitxer de resultats favorits.");
+            System.out.println("Error al llegir el fitxer!");
         }
-
-
     }
-
 }

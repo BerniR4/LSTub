@@ -5,32 +5,60 @@ import helpers.GestorAPI;
 import helpers.GestorJSON;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PreferitsManager {
-    private ArrayList<Resultat> preferits;
+    private ArrayList<Canal> canals;
+    private ArrayList<Video> videos;
+    private ArrayList<Llista> llistes;
 
-    public PreferitsManager(ArrayList<Resultat> preferits) {
-        this.preferits = preferits;
+    public PreferitsManager(ArrayList<Canal> canals, ArrayList<Video> videos, ArrayList<Llista> llistes) {
+        this.canals = canals;
+        this.videos = videos;
+        this.llistes = llistes;
     }
 
-    public void afegirPreferit(Resultat r) {
-        preferits.add(r);
-        GestorJSON.getSharedInstance().saveFile(preferits);
+    public ArrayList<Canal> getCanals() {
+        return canals;
     }
 
-    public ArrayList<Video> getVideoList() {
-        ArrayList<Video> list = new ArrayList<>();
-        for (Resultat r : preferits) {
-            if (r.getTipus().equals("Video")){
-                JsonObject jsonObject = GestorAPI.getSharedInstance().getVideoInfo(r.id);
-                Video video = new Video(r);
-                video.setLikes(GestorJSON.getSharedInstance().getLikes(jsonObject));
-                video.setDislikes(GestorJSON.getSharedInstance().getDislikes(jsonObject));
-                System.out.println(video.getPercent());
-                list.add(video);
-            }
+    public ArrayList<Video> getVideos() {
+        return videos;
+    }
+
+    public ArrayList<Llista> getLlistes() {
+        return llistes;
+    }
+
+    public long getAverageReproduccions() {
+        long acum=0;
+        for(Video v: videos) {
+            acum = acum + v.getReproduccions();
         }
-        return list;
+        return acum/videos.size();
+    }
+
+    public long getAverageSubscripcions() {
+        long acum=0;
+        for(Canal c: canals) {
+            acum = acum + c.getSubscriptors();
+        }
+        return acum/videos.size();
+    }
+
+    public void afegirVideo(Video v) {
+        videos.add(v);
+        GestorJSON.getSharedInstance().saveFile(this);
+    }
+
+    public void afegirCanal(Canal c) {
+        canals.add(c);
+        GestorJSON.getSharedInstance().saveFile(this);
+    }
+
+    public void afegirLlista(Llista l) {
+        llistes.add(l);
+        GestorJSON.getSharedInstance().saveFile(this);
     }
 }
