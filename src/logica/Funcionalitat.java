@@ -2,6 +2,7 @@ package logica;
 
 import com.google.gson.JsonObject;
 import helpers.GestorAPI;
+import helpers.GestorHTML;
 import helpers.GestorJSON;
 import model.*;
 import java.util.ArrayList;
@@ -114,25 +115,24 @@ public class Funcionalitat {
                 case 3:
                     ArrayList<Video> list = manager.getVideos();
                     list.sort(Video.PERCENT_COMPARATOR);
-                    System.out.println(System.getProperty("line.separator"));
                     for (int i = 0; i < 10 && i < list.size(); i++) {
                         System.out.println(list.get(i).getTitol() + "  -  " + list.get(i).getPercentatgeLikes());
                     }
-                    System.out.println(System.getProperty("line.separator"));
                     break;
                 case 4:
-                    System.out.println(System.getProperty("line.separator"));
                     System.out.println("Mitjana de reproduccions dels videos: " + manager.getAverageReproduccions());
                     System.out.println("Mitjana de subscriptors dels canals: " + manager.getAverageSubscripcions());
                     System.out.println("La playlist més vella: " + manager.getOldestPlaylist());
                     System.out.println("La playlist més nova: " + manager.getNewestPlaylist());
-                    System.out.println(System.getProperty("line.separator"));
                     break;
                 case 5:
+                    for(Llista l: manager.getLlistes()) {
+                        GestorHTML.getInstance().createPlaylistHTML(l);
+                    }
                     break;
                 case 6:
+                    GestorHTML.getInstance().createMosaic();
                     break;
-
             }
 
         }

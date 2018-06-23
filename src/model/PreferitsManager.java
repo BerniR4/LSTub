@@ -48,17 +48,23 @@ public class PreferitsManager {
     }
 
     public void afegirVideo(Video v) {
-        videos.add(v);
+        if(!videos.contains(v)) {
+            videos.add(v);
+        }
         GestorJSON.getSharedInstance().saveFile(this);
     }
 
     public void afegirCanal(Canal c) {
-        canals.add(c);
+        if(!canals.contains(c)) {
+            canals.add(c);
+        }
         GestorJSON.getSharedInstance().saveFile(this);
     }
 
     public void afegirLlista(Llista l) {
-        llistes.add(l);
+        if(!llistes.contains(l)) {
+            llistes.add(l);
+        }
         GestorJSON.getSharedInstance().saveFile(this);
     }
 

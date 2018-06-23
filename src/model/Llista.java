@@ -13,9 +13,9 @@ public class Llista extends Resultat {
                 resultat.getDescripcio() , resultat.getCanal(), resultat.getThumbnail());
     }
 
-    public static final Comparator<Llista> DATE_COMPARATOR = (o1, o2) -> (int) (o2.getPublicacio().compareTo(o1.getPublicacio()));
+    static final Comparator<Llista> DATE_COMPARATOR = (o1, o2) -> (int) (o2.getPublicacio().compareTo(o1.getPublicacio()));
 
-    public Calendar getPublicacio() {
+    Calendar getPublicacio() {
         return publicacio;
     }
 
@@ -25,5 +25,9 @@ public class Llista extends Resultat {
 
     public void setVideos(ArrayList<Video> videos) {
         this.videos = videos;
+    }
+
+    public ArrayList<Video> getVideos() {
+        return videos;
     }
 }
