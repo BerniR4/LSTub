@@ -22,7 +22,7 @@ public class Menu {
     }
 
     public void mostraMenu() {
-
+        System.out.println();
         System.out.println("1. Cerca de Resultats");
         System.out.println("2. Desar Preferits");
         System.out.println("3. Millors videos");
@@ -31,7 +31,6 @@ public class Menu {
         System.out.println("6. El Mosaic");
         System.out.println("7. Sortir");
         System.out.println();
-
     }
 
     public void demanaOpcio(){
@@ -56,8 +55,9 @@ public class Menu {
             sc.next();
             opcio = 0;
 
+        } finally {
+            System.out.println("");
         }
-
     }
 
     public boolean opcioCorrecta(){

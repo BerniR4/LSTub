@@ -50,6 +50,7 @@ public class PreferitsManager {
     public void afegirVideo(Video v) {
         if(!videos.contains(v)) {
             videos.add(v);
+            System.out.println("Aquest element ja el tenies a preferits!");
         }
         GestorJSON.getSharedInstance().saveFile(this);
     }
@@ -57,6 +58,7 @@ public class PreferitsManager {
     public void afegirCanal(Canal c) {
         if(!canals.contains(c)) {
             canals.add(c);
+            System.out.println("Aquest element ja el tenies a preferits!");
         }
         GestorJSON.getSharedInstance().saveFile(this);
     }
@@ -64,6 +66,7 @@ public class PreferitsManager {
     public void afegirLlista(Llista l) {
         if(!llistes.contains(l)) {
             llistes.add(l);
+            System.out.println("Aquest element ja el tenies a preferits!");
         }
         GestorJSON.getSharedInstance().saveFile(this);
     }

@@ -6,7 +6,6 @@ import helpers.GestorHTML;
 import helpers.GestorJSON;
 import model.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Funcionalitat {
@@ -41,7 +40,7 @@ public class Funcionalitat {
 
                     System.out.println();
                     System.out.println("Insereix el pàrametre de cerca:");
-                    param = sc.next();
+                    param = sc.nextLine();
 
                     gestorAPI = GestorAPI.getSharedInstance();
                     result = gestorAPI.getResult(param, -1, null);
@@ -57,8 +56,8 @@ public class Funcionalitat {
 
                     boolean continuar = true;
                     do {
-                        System.out.println("Insereix un número per a guardar el vídeo o 'NEXT' per a mostrar " +
-                                "els 10 següents.");
+                        System.out.println("Insereix un número per a guardar l'element a preferits o 'NEXT' per a " +
+                                "mostrar els 10 següents.");
                         System.out.println("Si es vol sortir, instrodueix 'STOP': ");
                         param = sc.nextLine();
 
@@ -131,7 +130,7 @@ public class Funcionalitat {
                     }
                     break;
                 case 6:
-                    GestorHTML.getInstance().createMosaic();
+                    GestorHTML.getInstance().createMosaic(manager.getVideos(), manager.getLlistes(), manager.getCanals());
                     break;
             }
 

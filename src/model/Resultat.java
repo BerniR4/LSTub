@@ -71,11 +71,9 @@ public class Resultat {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Nom: ").append(titol).append(System.lineSeparator()).append('\t');
-        sb.append("Tipus: ").append(tipus).append(System.lineSeparator()).append('\t');
-        sb.append("Canal: ").append(canal).append(System.lineSeparator()).append('\t');
-        sb.append("Descripció: ").append(descripcio).append(System.lineSeparator());
-        return sb.toString();
+        return '\t' + "Nom: " + titol + System.lineSeparator() + '\t' +
+                "Tipus: " + tipus + System.lineSeparator() + '\t' +
+                "Canal: " + canal + System.lineSeparator() + '\t' +
+                "Descripció: " + descripcio + System.lineSeparator();
     }
 }
