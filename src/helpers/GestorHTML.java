@@ -31,7 +31,8 @@ public class GestorHTML {
     }
 
     public void createPlaylistHTML(Llista l) {
-        File f = new File("./" + l.getTitol() .replaceAll(" ", "_") + ".html");
+        File f = new File("./" + l.getTitol() .replaceAll(" ", "_").
+                replaceAll(":", "_") + ".html");
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(f));
