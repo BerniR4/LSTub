@@ -5,6 +5,8 @@ import helpers.GestorAPI;
 import helpers.GestorHTML;
 import helpers.GestorJSON;
 import model.*;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,6 +26,7 @@ public class Funcionalitat {
                     System.out.println();
                     System.out.println("Insereix el pàrametre de cerca:");
                     String param = sc.next();
+                    param = param.replaceAll(" ", "%20");
 
                     GestorAPI gestorAPI = GestorAPI.getSharedInstance();
                     JsonObject result = gestorAPI.getResult(param, 3, null);
@@ -41,6 +44,7 @@ public class Funcionalitat {
                     System.out.println();
                     System.out.println("Insereix el pàrametre de cerca:");
                     param = sc.nextLine();
+                    param = param.replaceAll(" ", "%20");
 
                     gestorAPI = GestorAPI.getSharedInstance();
                     result = gestorAPI.getResult(param, -1, null);
@@ -54,68 +58,24 @@ public class Funcionalitat {
                                 llista.get(i).toString());
                     }
 
-                    boolean continuar = true;
                     do {
                         System.out.println("Insereix un número per a guardar l'element a preferits o 'NEXT' per a " +
                                 "mostrar els 10 següents.");
                         System.out.println("Si es vol sortir, instrodueix 'STOP': ");
-                        param = sc.nextLine();
+                        String inst = sc.nextLine();
 
-                        if (param.compareToIgnoreCase("STOP") == 0){
-                            continuar = false;
-                        } else if (param.compareToIgnoreCase("NEXT") == 0) {
-                            result = gestorAPI.getResult(param, -1, nextPage);
-                            llista = gestorJSON.getResultList(result);
-                            nextPage = gestorJSON.getNextPageCode(result);
-                            for (int i = 0; i < 10; i++) {
-                                System.out.println(Integer.toString(i + 1) + " - " +
-                                        llista.get(i).toString());
-                            }
-                        } else {
-                            try {
-                                int aux = Integer.parseInt(param);
-                                if (aux > 0 && aux <= 10) {
-                                    Resultat r = llista.get(aux - 1);
-                                    JsonObject jsonObject;
-                                    switch (r.getTipus()) {
-                                        case "Video":
-                                            Video v = new Video(r);
-                                            jsonObject = GestorAPI.getSharedInstance().getVideoInfo(v.getId());
-                                            v.setPercentatgeLikes(GestorJSON.getSharedInstance().getLikes(jsonObject),
-                                                    GestorJSON.getSharedInstance().getDislikes(jsonObject));
-                                            v.setReproduccions(GestorJSON.getSharedInstance().getReproduccions(jsonObject));
-                                            manager.afegirVideo(v);
-                                            break;
-                                        case "Canal":
-                                            Canal c = new Canal(r);
-                                            jsonObject = GestorAPI.getSharedInstance().getChannelInfo(c.getId());
-                                            c.setSubscriptors(GestorJSON.getSharedInstance().getSubscriptors(jsonObject));
-                                            manager.afegirCanal(c);
-                                            break;
-                                        case "Llista de reproducció":
-                                            Llista l = new Llista(r);
-                                            jsonObject = GestorAPI.getSharedInstance().getPlaylistInfo(l.getId());
-                                            l.setPublicacio(GestorJSON.getSharedInstance().getPublicacio(jsonObject));
-                                            l.setVideos(GestorJSON.getSharedInstance().getPlayListVideos(l.getId()));
-                                            manager.afegirLlista(l);
-                                            break;
-                                    }
-                                    continuar = false;
-                                } else {
-                                    System.out.println("Error, no ha introduït una instrucció vàlida.");
-                                }
-                            }catch (NumberFormatException e){
-                                System.out.println("Error, no ha introduït una instrucció vàlida.");
-                            }
-                        }
-                    } while (continuar);
+                        nextPage = tractaInstruccio(inst, nextPage, llista, param);
+
+                    } while (nextPage != null);
                     break;
 
                 case 3:
                     ArrayList<Video> list = manager.getVideos();
                     list.sort(Video.PERCENT_COMPARATOR);
+                    DecimalFormat df = new DecimalFormat("####0.00");
                     for (int i = 0; i < 10 && i < list.size(); i++) {
-                        System.out.println(list.get(i).getTitol() + "  -  " + list.get(i).getPercentatgeLikes());
+                        System.out.println(list.get(i).getTitol() + "  -  " +
+                                df.format(list.get(i).getPercentatgeLikes()) + "%");
                     }
                     break;
                 case 4:
@@ -136,6 +96,65 @@ public class Funcionalitat {
 
         }
 
+    }
+
+    private String tractaInstruccio(String inst, String nextPage, ArrayList<Resultat> llista, String param) {
+        GestorAPI gestorAPI = GestorAPI.getSharedInstance();
+        GestorJSON gestorJSON = GestorJSON.getSharedInstance();
+
+        if (inst.compareToIgnoreCase("STOP") == 0){
+            return null;
+        } else if (inst.compareToIgnoreCase("NEXT") == 0) {
+            JsonObject result = gestorAPI.getResult(param, -1, nextPage);
+            llista = gestorJSON.getResultList(result);
+            nextPage = gestorJSON.getNextPageCode(result);
+            for (int i = 0; i < 10; i++) {
+                System.out.println(Integer.toString(i + 1) + " - " +
+                        llista.get(i).toString());
+            }
+        } else {
+            try {
+                int aux = Integer.parseInt(inst);
+                if (!tractaSeleccio(aux, llista)) return null;
+            }catch (NumberFormatException e){
+                System.out.println("Error, no ha introduït una instrucció vàlida.");
+            }
+        }
+        return nextPage;
+    }
+
+    private boolean tractaSeleccio(int aux, ArrayList<Resultat> llista) throws NumberFormatException {
+        if (aux > 0 && aux <= 10) {
+            Resultat r = llista.get(aux - 1);
+            JsonObject jsonObject;
+            switch (r.getTipus()) {
+                case "Video":
+                    Video v = new Video(r);
+                    jsonObject = GestorAPI.getSharedInstance().getVideoInfo(v.getId());
+                    v.setPercentatgeLikes(GestorJSON.getSharedInstance().getLikes(jsonObject),
+                            GestorJSON.getSharedInstance().getDislikes(jsonObject));
+                    v.setReproduccions(GestorJSON.getSharedInstance().getReproduccions(jsonObject));
+                    manager.afegirVideo(v);
+                    break;
+                case "Canal":
+                    Canal c = new Canal(r);
+                    jsonObject = GestorAPI.getSharedInstance().getChannelInfo(c.getId());
+                    c.setSubscriptors(GestorJSON.getSharedInstance().getSubscriptors(jsonObject));
+                    manager.afegirCanal(c);
+                    break;
+                case "Llista de reproducció":
+                    Llista l = new Llista(r);
+                    jsonObject = GestorAPI.getSharedInstance().getPlaylistInfo(l.getId());
+                    l.setPublicacio(GestorJSON.getSharedInstance().getPublicacio(jsonObject));
+                    l.setVideos(GestorJSON.getSharedInstance().getPlayListVideos(l.getId()));
+                    manager.afegirLlista(l);
+                    break;
+            }
+            return false;
+        } else {
+            System.out.println("Error, no ha introduït una instrucció vàlida.");
+        }
+        return true;
     }
 
 }
