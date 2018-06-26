@@ -10,14 +10,30 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * <h1>Funcionalitat</h1>
+ * Funcionalitat és la classe encarregada d'executar totes les opcions que ofereix el menú.
+ *
+ * @author  Albert Ferrando i Bernat Rovirosa
+ * @version 1.0
+ * @since   2018-07-22
+ */
 public class Funcionalitat {
 
     private PreferitsManager manager;
 
+    /**
+     * Constructor amb paràmetres.
+     * @param manager Manager dels preferits.
+     */
     public Funcionalitat(PreferitsManager manager){
         this.manager = manager;
     }
 
+    /**
+     * Aquest mètode s'encarrega d'executar una opció.
+     * @param opcio Opció que s'ha d'executar.
+     */
     public void executaFuncionalitat(int opcio){
         Scanner sc = new Scanner(System.in);
         if(opcio != 7) {
@@ -65,7 +81,6 @@ public class Funcionalitat {
                         String inst = sc.nextLine();
 
                         nextPage = tractaInstruccio(inst, nextPage, llista, param);
-
                     } while (nextPage != null);
                     break;
 
@@ -123,7 +138,14 @@ public class Funcionalitat {
         return nextPage;
     }
 
-    private boolean tractaSeleccio(int aux, ArrayList<Resultat> llista) throws NumberFormatException {
+    /**
+     * Aquest mètode s'encarrega de recuperar tota la informació necessària d'un dels 10 resultats obtinguts.
+     * @param aux Enter que indica el resultat del qual volem obtenir tota la informació.
+     * @param llista Llista de 10 resultats de la qual agafarem el resultat que ens indiqui aux.
+     * @return Retorna cert en cas que hi hagi un error i fals en cas contrari.
+     * @throws NumberFormatException
+     */
+    private boolean tractaSeleccio(int aux, ArrayList<Resultat> llista) {
         if (aux > 0 && aux <= 10) {
             Resultat r = llista.get(aux - 1);
             JsonObject jsonObject;
@@ -156,5 +178,4 @@ public class Funcionalitat {
         }
         return true;
     }
-
 }

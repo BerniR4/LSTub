@@ -2,14 +2,21 @@ package helpers;
 
 import com.google.gson.*;
 import model.*;
-
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
+/**
+ * <h1>GestorJSON</h1>
+ * GestorJSON és una classe Singleton que conté tots els mètodes necessaris per a llegir i escriure arxius en format
+ * JSON.
+ *
+ * @author  Albert Ferrando i Bernat Rovirosa
+ * @version 1.0
+ * @since   2018-07-22
+ */
 public class GestorJSON {
     private static final String FILEPATH = "data" + System.getProperty("file.separator") + "favoriteResults.json";
     private static final String VIDEO = "youtube#video";
@@ -18,23 +25,25 @@ public class GestorJSON {
 
     private static GestorJSON sharedInstance = new GestorJSON();
 
+    /**
+     * Constructor sense paràmetres.
+     */
     private GestorJSON() {
-
     }
 
+    /**
+     * Getter de la instància del singleton.
+     * @return Instància singleton.
+     */
     public static GestorJSON getSharedInstance() {
         return sharedInstance;
     }
 
-    public ArrayList<Resultat> carregaPreferits() throws FileNotFoundException {
-        Gson gson = new Gson();
-        FileReader file = new FileReader(FILEPATH);
-        BufferedReader br = new BufferedReader(file);
-        Resultat[] list = gson.fromJson(br, Resultat[].class);
-        if (list == null) return new ArrayList<>();
-        return new ArrayList<>(Arrays.asList(list));
-    }
-
+    /**
+     * Mètode que s'encarrega de transformar un jsonObject en un arraylist de resultats.
+     * @param jsonObject JSONObject que conté la informació dels resultats que anirem parsejant.
+     * @return Arraylist de resultats trets a partir del jsonObject.
+     */
     public ArrayList<Resultat> getResultList(JsonObject jsonObject) {
         ArrayList<Resultat> resultats = new ArrayList<>();
         JsonArray items = jsonObject.getAsJsonArray("items");
@@ -67,15 +76,24 @@ public class GestorJSON {
         return resultats;
     }
 
+    /**
+     * Aquest mètode s'encarrega d'obtenir el token de la següent pàgina de resultats.
+     * @param result JSONObject de resultats del qual es vol obtenir el token de la següent pàgina de resultats.
+     * @return Token de la següent pàgina de resultats.
+     */
     public String getNextPageCode(JsonObject result) {
         return result.get("nextPageToken").getAsString();
     }
 
+    /**
+     * Aquest mètode s'encarrega d'escriure en format json al fitxer favoriteResults tots els preferits afegits fins al moment.
+     * @param preferits Classe PreferitsManager que conté tots els preferits afegits fins al moment.
+     */
     public void saveFile(PreferitsManager preferits){
         Gson gson = new Gson();
         String textJson = gson.toJson(preferits);
-
         PrintWriter fileWriter = null;
+
         try {
             fileWriter = new PrintWriter(new File(FILEPATH));
             fileWriter.println(textJson);
@@ -85,21 +103,41 @@ public class GestorJSON {
         }
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar el nombre de reproduccions donat un jsonObject d'un video concret.
+     * @param result Informació d'un video concret del qual es volen recuperar les reproduccions.
+     * @return Número de reproduccions.
+     */
     public long getReproduccions(JsonObject result) {
         return result.getAsJsonArray("items").get(0).getAsJsonObject().get("statistics").getAsJsonObject()
                 .get("viewCount").getAsLong();
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar el nombre de subscriptors donat un jsonObject d'un canal concret.
+     * @param result Informació d'un canal concret del qual es vol recuperar el nombre de subscriptors.
+     * @return Nombre de subscriptors..
+     */
     public long getSubscriptors(JsonObject result) {
         return result.getAsJsonArray("items").get(0).getAsJsonObject().get("statistics").getAsJsonObject()
                 .get("subscriberCount").getAsLong();
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar el nombre de likes donat un jsonObject d'un video concret.
+     * @param result Informació d'un video concret del qual es volen recuperar els likes.
+     * @return Número de likes.
+     */
     public long getLikes(JsonObject result) {
         return result.getAsJsonArray("items").get(0).getAsJsonObject().get("statistics").getAsJsonObject()
                 .get("likeCount").getAsLong();
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar la data de publicació a partir d'un jsonObject d'una llista de reprducció concreta.
+     * @param result Informació de la llista de reproducció de la qual es vol obtenir la data de publicació.
+     * @return Data de publicació.
+     */
     public Calendar getPublicacio(JsonObject result) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
@@ -114,17 +152,31 @@ public class GestorJSON {
         return calendar;
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar el nombre de dislikes donat un jsonObject d'un video concret.
+     * @param result Informació d'un video concret del qual es volen recuperar els dislikes.
+     * @return Número de dislikes.
+     */
     public long getDislikes(JsonObject result) {
         return result.getAsJsonArray("items").get(0).getAsJsonObject().get("statistics").getAsJsonObject()
                 .get("dislikeCount").getAsLong();
     }
 
+    /**
+     * Aquest mètode s'encarrega de retornar els diferents videos d'una llista de reproducció.
+     * @param id Id de la llista de reproducció de la qual es volen obtenir els videos.
+     * @return Arraylist de videos de la llista de reproducció concreta.
+     */
     public ArrayList<Video> getPlayListVideos(String id) {
         boolean keepgoing = true;
         int voltes = 1;
+        //Recuperem 50 videos de la llista de reproducció, el màxim que es poden obtenir d'una petició.
         JsonObject jsonObject = GestorAPI.getSharedInstance().getPlaylistItemsInfo(id, "no");
+        //Recuperem el nombre de videos totals que té la llista de reproducció.
         int total = jsonObject.getAsJsonObject("pageInfo").get("totalResults").getAsInt();
         ArrayList<Video> resultats = new ArrayList<>();
+
+        //Mentre no haguem obtingut tots els videos de la llista de reproducció seguim obtenint resultats.
         while (keepgoing) {
             JsonArray items = jsonObject.getAsJsonArray("items");
             for(int i = 0; i < items.size(); i++) {
@@ -146,6 +198,11 @@ public class GestorJSON {
         return resultats;
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar tots els canals del fitxer favoriteResults.
+     * @return Canals obtinguts a partir del fitxer favoriteResultats.
+     * @throws FileNotFoundException En cas que no es pugui accedir al fitxer favoriteResults.
+     */
     public ArrayList<Canal> carregaCanals() throws FileNotFoundException {
         Gson gson = new Gson();
         ArrayList<Canal> llista = new ArrayList<>();
@@ -163,6 +220,11 @@ public class GestorJSON {
         return llista;
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar tots els videos del fitxer favoriteResults.
+     * @return Videos obtinguts a partir del fitxer favoriteResultats.
+     * @throws FileNotFoundException En cas que no es pugui accedir al fitxer favoriteResults.
+     */
     public ArrayList<Video> carregaVideos() throws FileNotFoundException {
         Gson gson = new Gson();
         ArrayList<Video> llista = new ArrayList<>();
@@ -180,6 +242,11 @@ public class GestorJSON {
         return llista;
     }
 
+    /**
+     * Aquest mètode s'encarrega de recuperar totes les llistes de reproducció del fitxer favoriteResults.
+     * @return Llistes de reproducció obtingudes a partir del fitxer favoriteResultats.
+     * @throws FileNotFoundException En cas que no es pugui accedir al fitxer favoriteResults.
+     */
     public ArrayList<Llista> carregaLlistes() throws FileNotFoundException {
         Gson gson = new Gson();
         ArrayList<Llista> llista = new ArrayList<>();

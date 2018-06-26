@@ -3,13 +3,21 @@ package helpers;
 import model.Canal;
 import model.Llista;
 import model.Video;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * <h1>GestorHTML</h1>
+ * GestorHTML és una classe Singleton que conté tots els mètodes necessaris per a generar els diferents fitxers HTML
+ * que ha de generar el programa.
+ *
+ * @author  Albert Ferrando i Bernat Rovirosa
+ * @version 1.0
+ * @since   2018-07-22
+ */
 public class GestorHTML {
     private static GestorHTML ourInstance = new GestorHTML();
 
@@ -23,13 +31,24 @@ public class GestorHTML {
             "</head>\n" +
             "<body>\n";
 
+    /**
+     * Getter de la instància del singleton.
+     * @return Instància singleton.
+     */
     public static GestorHTML getInstance() {
         return ourInstance;
     }
 
+    /**
+     * Constructor sense paràmetres.
+     */
     private GestorHTML() {
     }
 
+    /**
+     * Aquest mètode crea un fitxer HTML amb tots els videos d'una llista de reproducció.
+     * @param l Llista de reproducció de la qual s'agafaran els videos per a fer el fitxer HTML.
+     */
     public void createPlaylistHTML(Llista l) {
         File f = new File("./" + l.getTitol() .replaceAll(" ", "_").
                 replaceAll(":", "_") + ".html");
@@ -58,6 +77,12 @@ public class GestorHTML {
         }
     }
 
+    /**
+     * Aquest mètode crea un HTML on es mostren, en forma de graella, totes les miniatures dels elements rebuts per paràmetre.
+     * @param videos Videos dels quals s'agafaran les miniatures.
+     * @param llistes Llistes de reproducció de les quals s'agafaran les miniatures.
+     * @param canals Canals dels quals s'agafaran les miniatures.
+     */
     public void createMosaic(ArrayList<Video> videos, ArrayList<Llista> llistes, ArrayList<Canal> canals) {
         File f = new File("./Mosaic.html");
         BufferedWriter writer = null;
