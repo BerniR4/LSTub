@@ -56,7 +56,12 @@ public class PreferitsManager {
         for(Video v: videos) {
             acum = acum + v.getReproduccions();
         }
-        return acum/videos.size();
+        if(videos.size() > 0 ) {
+            return acum / videos.size();
+        } else {
+            System.out.println("No hi ha videos guardats\r\n");
+            return acum;
+        }
     }
 
     /**
@@ -68,7 +73,11 @@ public class PreferitsManager {
         for(Canal c: canals) {
             acum = acum + c.getSubscriptors();
         }
-        return acum/videos.size();
+        if(videos.size() > 0 ) {
+            return acum / videos.size();
+        } else {
+            return acum;
+        }
     }
 
     /**
@@ -113,7 +122,11 @@ public class PreferitsManager {
      */
     public String getNewestPlaylist() {
         llistes.sort(Llista.DATE_COMPARATOR);
-        return llistes.get(0).getTitol() + "  -  " + llistes.get(0).getPublicacio().getTime();
+        if (llistes.size() > 0) {
+            return llistes.get(0).getTitol() + "  -  " + llistes.get(0).getPublicacio().getTime();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -122,6 +135,11 @@ public class PreferitsManager {
      */
     public String getOldestPlaylist() {
         llistes.sort(Llista.DATE_COMPARATOR);
-        return llistes.get(llistes.size() - 1).getTitol() + "  -  " + llistes.get(llistes.size() - 1).getPublicacio().getTime();
+        if (llistes.size() > 0) {
+            return llistes.get(llistes.size() - 1).getTitol() + "  -  " + llistes.get(llistes.size() - 1).getPublicacio().getTime();
+        } else {
+            System.out.println("No hi ha llistes desades.\r\n");
+            return null;
+        }
     }
 }

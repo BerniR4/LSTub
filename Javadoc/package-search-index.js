@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"helpers"},{"l":"logica"},{"l":"model"}]

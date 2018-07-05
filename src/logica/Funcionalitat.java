@@ -113,6 +113,15 @@ public class Funcionalitat {
 
     }
 
+    /**
+     * Aquest mètode s'encarrega de tractar quina instrucció ha introduït l'usuari (STOP, NEXT o afegir un resultat a
+     * preferits).
+     * @param inst String que indica quina instrucció ha introduït l'usuari
+     * @param nextPage String que fa referencia al codi de la següent pàgina a l'API de Youtbe
+     * @param llista Llista de tipus Resultat que indica les diferents opcions que l'usuari pot elegir.
+     * @param param String que indica quin és el paràmetre de cerca que l'usuari ha introduit.
+     * @return Retorna el codi de la següent pàgina de l'API de Youtube. Si s'ha fet STOP retorna null.
+     */
     private String tractaInstruccio(String inst, String nextPage, ArrayList<Resultat> llista, String param) {
         GestorAPI gestorAPI = GestorAPI.getSharedInstance();
         GestorJSON gestorJSON = GestorJSON.getSharedInstance();
@@ -143,7 +152,6 @@ public class Funcionalitat {
      * @param aux Enter que indica el resultat del qual volem obtenir tota la informació.
      * @param llista Llista de 10 resultats de la qual agafarem el resultat que ens indiqui aux.
      * @return Retorna cert en cas que hi hagi un error i fals en cas contrari.
-     * @throws NumberFormatException
      */
     private boolean tractaSeleccio(int aux, ArrayList<Resultat> llista) {
         if (aux > 0 && aux <= 10) {
